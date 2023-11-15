@@ -27,12 +27,12 @@ import (
 
 func main() {
 	fmt.Println(
-		new(N).find("Welcome to Linux !\n"+
+		new(A).highlight("Welcome to Linux !\n"+
 			"Linux is a free and opensource Operating system that is mostly used by\n"+
 			"developers and in production servers for hosting crucial components such as web\n"+
 			"and database servers. Linux has also made a name for itself in PCs.\n"+
 			"Beginners looking to experiment with Linux can get started with friendlier linux\n"+
-			"distributions such as Ubuntu, Mint, Fedora and Elementary OS.", "Linux"),
+			"distributions such as Ubuntu, Mint, Fedora and Elementary OS.", "Linux", 1),
 	)
 }
 
@@ -45,7 +45,7 @@ type A struct{}
 
 func (a *A) highlight(s string, subStr string, n int) []string {
 	lines := strings.Split(s, "\n")
-	subStr = strings.ToLower(subStr)
+	// subStr = strings.ToLower(subStr)
 	var indexies = findAll(lines, subStr)
 
 	var result = make([]string, len(indexies))
@@ -85,7 +85,7 @@ type B struct{}
 
 func (b *B) highlight(s string, subStr string, n int) []string {
 	lines := strings.Split(s, "\n")
-	subStr = strings.ToLower(subStr)
+	// subStr = strings.ToLower(subStr)
 	var indexies = findAll(lines, subStr)
 
 	var result = make([]string, len(indexies))
@@ -107,7 +107,7 @@ type C struct{}
 
 func (c *C) highlight(s string, subStr string, n int) []string {
 	lines := strings.Split(s, "\n")
-	subStr = strings.ToLower(subStr)
+	// subStr = strings.ToLower(subStr)
 	var indexies = findAll(lines, subStr)
 
 	var result = make([]string, len(indexies))

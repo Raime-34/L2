@@ -1,5 +1,11 @@
 package main
 
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
 /*
 === Or channel ===
 
@@ -34,5 +40,37 @@ fmt.Printf(“fone after %v”, time.Since(start))
 */
 
 func main() {
+	ewfnwe()
+}
 
+func ewfnwe() error {
+	var wg sync.WaitGroup
+	wg.Add(3)
+
+	or := func(channels ...<-chan time.Time) <-chan time.Time {
+
+		out := make(chan time.Time)
+
+		for _, c := range channels {
+			go func(c <-chan time.Time) {
+				out <- <-c
+				wg.Done()
+			}(c)
+		}
+
+		go func() {
+			wg.Wait()
+			close(out)
+		}()
+
+		return out
+	}
+
+	channels := []<-chan time.Time{time.After(1 * time.Second), time.After(3 * time.Second), time.After(2 * time.Second)}
+
+	for v := range or(channels...) {
+		fmt.Println(v)
+	}
+
+	return nil
 }
