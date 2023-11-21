@@ -1,5 +1,9 @@
 package main
 
+import (
+	"net/http"
+)
+
 /*
 === HTTP server ===
 
@@ -18,10 +22,25 @@ package main
 В рамках задачи необходимо:
 	1. Реализовать все методы.
 	2. Бизнес логика НЕ должна зависеть от кода HTTP сервера.
-	3. В случае ошибки бизнес-логики сервер должен возвращать HTTP 503. В случае ошибки входных данных (невалидный int например) сервер должен возвращать HTTP 400. В случае остальных ошибок сервер должен возвращать HTTP 500. Web-сервер должен запускаться на порту указанном в конфиге и выводить в лог каждый обработанный запрос.
+	3. В случае ошибки бизнес-логики сервер должен возвращать HTTP 503. В случае ошибки входных данных (невалидный int например) сервер должен возвращать HTTP 400.
+		В случае остальных ошибок сервер должен возвращать HTTP 500. Web-сервер должен запускаться на порту указанном в конфиге и выводить в лог каждый обработанный запрос.
 	4. Код должен проходить проверки go vet и golint.
 */
 
+var (
+	events = make(map[int]Event, 100)
+)
+
 func main() {
+
+	initEvents()
+
+	http.HandleFunc("/events_for_day", events_for_day)
+	http.HandleFunc("/events_for_week", events_for_week)
+	http.HandleFunc("/events_for_month", events_for_month)
+	http.HandleFunc("/create_event", create_event)
+	http.HandleFunc("/update_event", update_event)
+
+	http.ListenAndServe(":8090", nil)
 
 }

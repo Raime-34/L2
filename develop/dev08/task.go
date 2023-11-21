@@ -3,6 +3,8 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
+	"net"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -103,6 +105,11 @@ func checkKWord(subStr string, instructions []IShite) []IShite {
 					input: inputs[1],
 				},
 			},
+		)
+	case "netcat":
+		return append(
+			instructions,
+			&Netcat{},
 		)
 	default:
 		return instructions
@@ -270,6 +277,27 @@ func myExec(exe string) {
 	err := cmd.Run()
 	if err != nil {
 		fmt.Println(err)
+	}
+}
+
+// #endregion
+
+// #region netcat
+type Netcat struct{}
+
+func (n *Netcat) doSomething() {
+	startClient(":8080")
+}
+
+func startClient(addr string) {
+	conn, err := net.Dial("tcp", addr)
+	if err != nil {
+		fmt.Printf("Can't connect to server: %s\n", err)
+		return
+	}
+	_, err = io.Copy(conn, os.Stdin)
+	if err != nil {
+		fmt.Printf("Connection error: %s\n", err)
 	}
 }
 
